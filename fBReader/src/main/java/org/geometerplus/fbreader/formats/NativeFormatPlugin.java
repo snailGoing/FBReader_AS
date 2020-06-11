@@ -128,9 +128,16 @@ public class NativeFormatPlugin extends BuiltinFormatPlugin {
 
 	private native int readModelNative(BookModel model, String cacheDir);
 
+	/**
+	 * 本地插件，文件图片代理
+	 */
 	@Override
 	public final ZLFileImageProxy readCover(ZLFile file) {
 		return new ZLFileImageProxy(file) {
+
+			/**
+			 * 基于图片文件 File 获取 ZLFileImage 类型输入流的图片
+			 */
 			@Override
 			protected ZLFileImage retrieveRealImage() {
 				final ZLFileImage[] box = new ZLFileImage[1];

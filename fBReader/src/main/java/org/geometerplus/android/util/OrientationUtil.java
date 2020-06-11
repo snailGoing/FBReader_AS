@@ -22,6 +22,8 @@ package org.geometerplus.android.util;
 import android.app.Activity;
 import android.content.Intent;
 
+import org.geometerplus.zlibrary.core.options.Config;
+
 public abstract class OrientationUtil {
 	private static final String KEY = "fbreader.orientation";
 

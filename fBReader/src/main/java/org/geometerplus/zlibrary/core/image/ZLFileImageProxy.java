@@ -21,6 +21,9 @@ package org.geometerplus.zlibrary.core.image;
 
 import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 
+/**
+ * 当前阅读器可打开的图书的文件图片，无需外部插件支持打开的图书
+ */
 public abstract class ZLFileImageProxy extends ZLImageSimpleProxy {
 	protected final ZLFile File;
 	private volatile ZLFileImage myImage;
@@ -39,6 +42,9 @@ public abstract class ZLFileImageProxy extends ZLImageSimpleProxy {
 		return "cover:" + File.getPath();
 	}
 
+	/**
+	 * 读取 File 文件获得 ZLFileImage 输入流对象
+	 */
 	@Override
 	public final synchronized void synchronize() {
 		if (myImage == null) {

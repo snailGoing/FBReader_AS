@@ -23,6 +23,11 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.image.ZLImage;
 import org.geometerplus.zlibrary.core.image.ZLImageProxy;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 外部插件支持的图书的图片
+ *
+ */
 public final class PluginImage extends ZLImageProxy {
 	public final ZLFile File;
 	public final ExternalFormatPlugin Plugin;

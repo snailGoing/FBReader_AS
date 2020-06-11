@@ -19,14 +19,39 @@
 
 package org.geometerplus.zlibrary.core.image;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 图片代理抽象类
+ *
+ * 子类：
+ *   ｜
+ *    -- {@link ZLImageSimpleProxy}
+ *   |
+ *    -- {@link org.geometerplus.fbreader.formats.PluginImage}
+ */
 public abstract class ZLImageProxy implements ZLImage {
+
+	/**
+	 * 同步器接口
+	 */
 	public interface Synchronizer {
+
+		/**
+		 * 开始图片加载
+		 */
 		void startImageLoading(ZLImageProxy image, Runnable postAction);
+
+		/**
+		 * 同步
+		 */
 		void synchronize(ZLImageProxy image, Runnable postAction);
 	}
 
 	private volatile boolean myIsSynchronized;
 
+	/**
+	 * 是否已经同步
+	 */
 	public final boolean isSynchronized() {
 		if (myIsSynchronized && isOutdated()) {
 			myIsSynchronized = false;
@@ -38,10 +63,20 @@ public abstract class ZLImageProxy implements ZLImage {
 		myIsSynchronized = true;
 	}
 
+	/**
+	 * 超期
+	 */
 	protected boolean isOutdated() {
 		return false;
 	}
 
+	/**
+	 * 开始同步
+	 *
+	 * 用途：加载图片，完成后执行 postAction 任务
+	 * Example： {@link org.geometerplus.fbreader.network.NetworkImage} 图片，下载后执行刷新显示到View UI
+	 * @see org.geometerplus.android.fbreader.network.NetworkBookInfoActivity#setupCover
+	 */
 	public void startSynchronization(Synchronizer synchronizer, Runnable postAction) {
 		synchronizer.startImageLoading(this, postAction);
 	}

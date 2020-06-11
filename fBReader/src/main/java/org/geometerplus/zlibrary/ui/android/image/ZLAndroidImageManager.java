@@ -21,7 +21,16 @@ package org.geometerplus.zlibrary.ui.android.image;
 
 import org.geometerplus.zlibrary.core.image.*;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 图片加载管理类
+ * 
+ */
 public final class ZLAndroidImageManager extends ZLImageManager {
+
+	/**
+	 * 获取指定图片的数据信息
+	 */
 	@Override
 	public ZLAndroidImageData getImageData(ZLImage image) {
 		if (image instanceof ZLImageProxy) {
@@ -38,6 +47,13 @@ public final class ZLAndroidImageManager extends ZLImageManager {
 
 	private ZLAndroidImageLoader myLoader;
 
+	/**
+	 * 开始图片加载
+	 *
+	 * @param syncronizer 同步器
+	 * @param image 图片代理
+	 * @param postLoadingRunnable 任务
+	 */
 	public void startImageLoading(ZLImageProxy.Synchronizer syncronizer, ZLImageProxy image, Runnable postLoadingRunnable) {
 		if (myLoader == null) {
 			myLoader = new ZLAndroidImageLoader();

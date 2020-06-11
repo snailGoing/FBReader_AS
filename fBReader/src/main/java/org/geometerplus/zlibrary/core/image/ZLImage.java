@@ -19,6 +19,11 @@
 
 package org.geometerplus.zlibrary.core.image;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 图片接口，提供 Uri
+ *
+ */
 public interface ZLImage {
 	String getURI();
 }

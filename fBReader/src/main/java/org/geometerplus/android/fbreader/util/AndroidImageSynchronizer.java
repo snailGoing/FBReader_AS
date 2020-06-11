@@ -38,7 +38,16 @@ import org.geometerplus.fbreader.formats.PluginImage;
 import org.geometerplus.android.fbreader.api.FBReaderIntents;
 import org.geometerplus.android.fbreader.formatPlugin.CoverReader;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 图片同步
+ *
+ */
 public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
+
+	/**
+	 *
+	 */
 	private static final class Connection implements ServiceConnection {
 		private final ExecutorService myExecutor = Executors.newSingleThreadExecutor();
 
@@ -83,12 +92,18 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 		myContext = service;
 	}
 
+	/**
+	 * 开始图片加载
+	 */
 	@Override
 	public void startImageLoading(ZLImageProxy image, Runnable postAction) {
 		final ZLAndroidImageManager manager = (ZLAndroidImageManager)ZLAndroidImageManager.Instance();
 		manager.startImageLoading(this, image, postAction);
 	}
 
+	/**
+	 * 不同类型图片同步处理
+	 */
 	@Override
 	public void synchronize(ZLImageProxy image, final Runnable postAction) {
 		if (image.isSynchronized()) {
@@ -96,7 +111,7 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 			if (postAction != null) {
 				postAction.run();
 			}
-		} else if (image instanceof ZLImageSimpleProxy) {
+		} else if (image instanceof ZLImageSimpleProxy) { // NetworkImage 或 ZLFileImageProxy
 			((ZLImageSimpleProxy)image).synchronize();
 			if (postAction != null) {
 				postAction.run();
@@ -121,6 +136,9 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 		}
 	}
 
+	/**
+	 * 清空解绑全部外部插件服务
+	 */
 	public synchronized void clear() {
 		for (ServiceConnection connection : myConnections.values()) {
 			myContext.unbindService(connection);
@@ -128,8 +146,12 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 		myConnections.clear();
 	}
 
+	/**
+	 * 获取外部插件的服务连接对象
+	 */
 	private synchronized Connection getConnection(ExternalFormatPlugin plugin) {
 		Connection connection = myConnections.get(plugin);
+		// 服务未连接，则创建连接并绑定启动插件服务
 		if (connection == null) {
 			connection = new Connection(plugin);
 			myConnections.put(plugin, connection);

@@ -30,6 +30,11 @@ import org.geometerplus.zlibrary.core.network.ZLNetworkException;
 import org.geometerplus.zlibrary.core.util.MimeType;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 网络图片，在线书库提供的图书
+ *
+ */
 public final class NetworkImage extends ZLImageSimpleProxy {
 	public final String Url;
 	private final SystemInfo mySystemInfo;

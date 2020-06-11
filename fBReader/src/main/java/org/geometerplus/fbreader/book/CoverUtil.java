@@ -27,11 +27,19 @@ import org.geometerplus.zlibrary.core.image.ZLImage;
 
 import org.geometerplus.fbreader.formats.IFormatPluginCollection;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 封面工具类
+ *
+ */
 public abstract class CoverUtil {
 	private static final WeakReference<ZLImage> NULL_IMAGE = new WeakReference<ZLImage>(null);
 	private static final WeakHashMap<ZLFile,WeakReference<ZLImage>> ourCovers =
 		new WeakHashMap<ZLFile,WeakReference<ZLImage>>();
 
+	/**
+	 * 基于图书对象和插件集合对象获取图片
+	 */
 	public static ZLImage getCover(AbstractBook book, IFormatPluginCollection collection) {
 		if (book == null) {
 			return null;
@@ -51,6 +59,8 @@ public abstract class CoverUtil {
 				return image;
 			}
 		}
+
+		// 插件集合获取图片文件类型插件，再读取获取对应图片
 		ZLImage image = null;
 		try {
 			image = collection.getPlugin(file).readCover(file);

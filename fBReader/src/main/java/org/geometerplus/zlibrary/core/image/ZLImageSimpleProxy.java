@@ -19,6 +19,15 @@
 
 package org.geometerplus.zlibrary.core.image;
 
+/**
+ * 同步作用的图片代理
+ *
+ * 子类：
+ *   ｜
+ *    -- {@link org.geometerplus.fbreader.network.NetworkImage} 网络图片，在线书库
+ *   ｜
+ *    -- {@link ZLFileImageProxy} 内置支持的图书图片
+ */
 public abstract class ZLImageSimpleProxy extends ZLImageProxy {
 	public abstract void synchronize();
 }

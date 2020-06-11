@@ -27,6 +27,11 @@ import org.geometerplus.zlibrary.core.filesystem.ZLFile;
 import org.geometerplus.zlibrary.core.filetypes.*;
 import org.geometerplus.zlibrary.core.util.SystemInfo;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 可支持的全部插件集合，包括内置和外部支持
+ * 
+ */
 public class PluginCollection implements IFormatPluginCollection {
 	static {
 		System.loadLibrary("NativeFormats-v4");

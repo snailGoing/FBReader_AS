@@ -30,8 +30,23 @@ import android.os.Message;
 
 import org.geometerplus.zlibrary.core.image.ZLImageProxy;
 
+/**
+ * @Date:  2020-06-11
+ * @Description: 图片加载器
+ * 
+ */
 class ZLAndroidImageLoader {
+
+	/**
+	 * 开始图片加载，最终子线程执行同步器同步
+	 *
+	 * @param synchronizer 同步器
+	 * @param image 图片代理
+	 * @param postAction 执行的操作
+	 */
 	void startImageLoading(final ZLImageProxy.Synchronizer synchronizer, final ZLImageProxy image, Runnable postAction) {
+
+		// postAction 加入缓存
 		synchronized (myOnImageSyncRunnables) {
 			LinkedList<Runnable> runnables = myOnImageSyncRunnables.get(image.getId());
 			if (runnables != null) {
@@ -48,6 +63,7 @@ class ZLAndroidImageLoader {
 			myOnImageSyncRunnables.put(image.getId(), runnables);
 		}
 
+		// 线程执行 postAction
 		final ExecutorService pool =
 			image.sourceType() == ZLImageProxy.SourceType.FILE
 				? mySinglePool : myPool;
@@ -79,6 +95,9 @@ class ZLAndroidImageLoader {
 
 	private final HashMap<String,LinkedList<Runnable>> myOnImageSyncRunnables = new HashMap<String,LinkedList<Runnable>>();
 
+	/**
+	 * 图片同步Handler，执行任务runnable，并移除队列
+	 */
 	private class ImageSynchronizedHandler extends Handler {
 		@Override
 		public void handleMessage(Message message) {

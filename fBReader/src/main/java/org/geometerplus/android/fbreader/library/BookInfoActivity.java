@@ -197,12 +197,14 @@ public class BookInfoActivity extends Activity implements IBookCollection.Listen
 		coverView.setVisibility(View.GONE);
 		coverView.setImageDrawable(null);
 
+		// 获取内置支持图书的文件图片
 		final ZLImage image = CoverUtil.getCover(book, pluginCollection);
 
 		if (image == null) {
 			return;
 		}
 
+		// 读取得到 ZLFileImage 输入流图片，然后执行 Runnable 刷新UI
 		if (image instanceof ZLImageProxy) {
 			((ZLImageProxy)image).startSynchronization(myImageSynchronizer, new Runnable() {
 				public void run() {
