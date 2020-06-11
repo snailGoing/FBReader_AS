@@ -46,19 +46,37 @@ import org.geometerplus.android.fbreader.formatPlugin.CoverReader;
 public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 
 	/**
-	 *
+	 * 服务连接对象，服务于外部支持插件
 	 */
 	private static final class Connection implements ServiceConnection {
+
+		/**
+		 * 单线程池
+		 */
 		private final ExecutorService myExecutor = Executors.newSingleThreadExecutor();
 
+		/**
+		 * 支持的外部插件
+		 */
 		private final ExternalFormatPlugin myPlugin;
+
+		/**
+		 * aidl 的封面读取 Bitmap 接口 readBitmap
+		 */
 		private volatile CoverReader Reader;
+
+		/**
+		 * 待执行的任务队列
+		 */
 		private final List<Runnable> myPostActions = new LinkedList<Runnable>();
 
 		Connection(ExternalFormatPlugin plugin) {
 			myPlugin = plugin;
 		}
 
+		/**
+		 * 添加或执行任务
+		 */
 		synchronized void runOrAddAction(Runnable action) {
 			if (Reader != null) {
 				myExecutor.execute(action);
@@ -67,6 +85,9 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 			}
 		}
 
+		/**
+		 * 服务连接，执行任务队列
+		 */
 		public synchronized void onServiceConnected(ComponentName className, IBinder binder) {
 			Reader = CoverReader.Stub.asInterface(binder);
 			for (Runnable action : myPostActions) {
@@ -81,6 +102,10 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 	}
 
 	private final Context myContext;
+
+	/**
+	 * 当前建立连接的外部支持插件集合
+	 */
 	private final Map<ExternalFormatPlugin,Connection> myConnections =
 		new HashMap<ExternalFormatPlugin,Connection>();
 
@@ -106,19 +131,23 @@ public class AndroidImageSynchronizer implements ZLImageProxy.Synchronizer {
 	 */
 	@Override
 	public void synchronize(ZLImageProxy image, final Runnable postAction) {
+		// Step 1: 图片加载同步完成，则执行任务
 		if (image.isSynchronized()) {
 			// TODO: also check if image is under synchronization
 			if (postAction != null) {
 				postAction.run();
 			}
-		} else if (image instanceof ZLImageSimpleProxy) { // NetworkImage 或 ZLFileImageProxy
+		} else if (image instanceof ZLImageSimpleProxy) { // Step 2: NetworkImage 或 ZLFileImageProxy,执行同步加载图片，然后执行任务（刷新ui）
 			((ZLImageSimpleProxy)image).synchronize();
 			if (postAction != null) {
 				postAction.run();
 			}
 		} else if (image instanceof PluginImage) {
+			// Step 3： 外部支持插件图书，建立服务连接
 			final PluginImage pluginImage = (PluginImage)image;
 			final Connection connection = getConnection(pluginImage.Plugin);
+
+			// Step 4: 连接完成，执行任务
 			connection.runOrAddAction(new Runnable() {
 				public void run() {
 					try {
