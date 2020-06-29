@@ -28,16 +28,20 @@ import org.geometerplus.zlibrary.core.drm.embedding.EmbeddingInputStream;
 import org.geometerplus.zlibrary.core.util.InputStreamHolder;
 
 public abstract class ZLFile implements InputStreamHolder {
+
+	/**
+	 * 缓存的文件（存在）
+	 */
 	private final static HashMap<String,ZLFile> ourCachedFiles = new HashMap<String,ZLFile>();
 
 	protected interface ArchiveType {
 		int	NONE = 0;
 		int	GZIP = 0x0001;
 		int	BZIP2 = 0x0002;
-		int	COMPRESSED = 0x00ff;
-		int	ZIP = 0x0100;
-		int	TAR = 0x0200;
-		int	ARCHIVE = 0xff00;
+		int	COMPRESSED = 0x00ff;          // 二进制：  11111111
+		int	ZIP = 0x0100;                // 二进制：  100000000
+		int	TAR = 0x0200;                // 二进制： 1000000000
+		int	ARCHIVE = 0xff00;      // 二进制： 1111111100000000
 	};
 
 	private String myExtension;
@@ -152,6 +156,7 @@ public abstract class ZLFile implements InputStreamHolder {
 	public abstract String getPath();
 	public abstract ZLFile getParent();
 	public abstract ZLPhysicalFile getPhysicalFile();
+	@Override
 	public abstract InputStream getInputStream() throws IOException;
 
 	public long lastModified() {
@@ -237,6 +242,12 @@ public abstract class ZLFile implements InputStreamHolder {
 		return myIsCached;
 	}
 
+	/**
+	 * 设置文件是否缓存
+	 *
+	 * 对于存在的文件，可以设置true或false
+	 * 不存在的文件，不应该设置true
+	 */
 	public void setCached(boolean cached) {
 		myIsCached = cached;
 		if (cached) {

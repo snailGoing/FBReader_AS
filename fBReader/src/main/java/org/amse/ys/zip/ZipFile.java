@@ -14,6 +14,25 @@ public final class ZipFile {
 	};
 
 	private final InputStreamHolder myStreamHolder;
+
+	/**
+	 * 压缩文件内部的全部LocalFileHeader文件信息
+	 *
+	 * Example: GGG.epub
+	 *      keys                                                                 values
+	 * "content.opf"                                                     文件LocalFileHeader信息
+	 * "media/cover.png"                                                 ...
+	 * "media/file0.png"                                                 ...
+	 *  ...                                                              ...
+	 * "media.file15.png"                                                ...
+	 * "META-INF/com.apple.ibooks,display-options.xml"                   ...
+	 * "META-INF/container.xml"                                          ...
+	 * "minetype"                                                        ...
+	 * "nav.xhtml"                                                       ...
+	 * "stylesheet.css"                                                  ...
+	 * "title_page.html"                                                 ...
+	 * "toc.ncx"                                                         ...
+	 */
 	private final Map<String,LocalFileHeader> myFileHeaders =
 		new TreeMap<String,LocalFileHeader>(ourIgnoreCaseComparator);
 
@@ -21,6 +40,7 @@ public final class ZipFile {
 
 	public ZipFile(final String fileName) {
 		this(new InputStreamHolder() {
+			@Override
 			public InputStream getInputStream() throws IOException {
 				return new FileInputStream(fileName);
 			}
@@ -29,6 +49,7 @@ public final class ZipFile {
 
 	public ZipFile(final File file) {
 		this(new InputStreamHolder() {
+			@Override
 			public InputStream getInputStream() throws IOException {
 				return new FileInputStream(file);
 			}

@@ -21,6 +21,12 @@ package org.geometerplus.fbreader.fbreader.options;
 
 import org.geometerplus.zlibrary.core.options.*;
 
+/**
+ * @Date:  2020-06-12
+ * @Description: FBReader 服务器同步相关配置开关
+ *
+ * @see org.geometerplus.android.fbreader.sync.SyncService 同步服务
+ */
 public class SyncOptions {
 	public static final String DOMAIN = "books.fbreader.org";
 	public static final String BASE_URL = "https://" + DOMAIN + "/";
